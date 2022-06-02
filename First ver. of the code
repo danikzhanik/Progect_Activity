@@ -1,7 +1,7 @@
 Первая версия кода
 //---------------------------------------------------------------------
 #include <iostream>
-#include <stdio.h>   // printf, fgets 
+#include <stdio.h>   // printf, fgets
 #include <string.h>  // strcpy, strncmp, strchr
 #include <string>
 #include <stdlib.h>
@@ -13,7 +13,7 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////
 // нахождение НОД методом Евклида
-long long gcd(long long a, long long b)
+long long gcd(long long a, long long b) 
 {
 	if (b == 0)
 		return a;
@@ -32,7 +32,7 @@ long long mul(long long a, long long b, long long m)
 	return (mul(a, b - 1, m) + a) % m;
 }
 //возведение в степень
-long long pows(long long a, long long b, long long m, int& k)
+long long pows(long long a, long long b, long long m, int &k)
 {
 	if (b == 0)
 		return 1;
@@ -44,8 +44,9 @@ long long pows(long long a, long long b, long long m, int& k)
 	return (mul(pows(a, b - 1, m, k), a, m)) % m;
 }
 // тест Ферма (до 100 итераций)
-bool test_ferma(long long x, int& k)
+bool test_ferma(long long x, int &k) 
 {
+	k = 0;
 	if (x == 2)
 		return true;
 	srand(time(NULL));
@@ -67,8 +68,9 @@ bool test_ferma(long long x, int& k)
 
 
 // самый простой метод, от 2 до корня числа
-bool prost_test(long long n, int& k)
+bool prost_test(long long n, int &k)
 {
+	k = 0;
 	for (long long i = 2; i <= sqrt(n); i++)
 	{
 		k++;
@@ -78,21 +80,21 @@ bool prost_test(long long n, int& k)
 	return true;
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 
-
 // тест Люка - Лемера
-bool lucas_lehmer_test(long long p)
+bool lucas_lehmer_test(long long p, int &k)
 {
+	k = 0;
 	if ((p % 2) == 0)
 		return false;
-	int S = 4, k = 1;
+	int S = 4, q = 1;
 	int M = pow(2, p) - 1;
-	while (k != p - 1)
+	while (q != p - 1)
 	{
+		++k;
 		S = ((S * S) - 2) % M;
-		k += 1;
+		q += 1;
 	}
 	if (S == 0)
 		return true;
@@ -106,46 +108,53 @@ int main()
 {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
-	int a;
+	int a, k;
 	char c;
 	do
 	{
-		cout << "Введите любое a (a>2): ";
+		cout << "===================================================================\n";
+		cout << "Введите число А (А>2) или 0, чтобы завершить: ";
 		cin >> a;
+		if (a == 0)
+			return 0;
 		cout << "\nВыберите 1 чтобы решить или 0, чтобы завершить:\n";
 		cin >> c;
 		switch (c)
 		{
-		case '1':
+		case '1': 
 		{
-			// вероятносный тест Ферма
-			cout << "##############################\n";
-			cout << "1 - вероятносный тест Ферма(до 100 итераций)\n";
-			int k = 0;
-			if (test_ferma(a, k) == true)
-				cout << "Число простое\n";
+			if (a < 0)
+				cout << "Введено отрицательное число\n";
+			else if (a == 1)
+				cout << "Введено 1\n";
+			else if (a == 2)
+				cout << "Введено 2\n";
 			else
-				cout << "Число составное\n";
-			cout << "Кол-во итераций: " << k << endl << "-------------------------------\n";
+			{
+				// вероятносный тест Ферма
+				cout << "1 - вероятносный тест Ферма(до 100 итераций)\n";
+				if (test_ferma(a, k) == true)
+					cout << "Число простое\n";
+				else
+					cout << "Число составное\n";
+				cout << "Кол-во итераций: " << k << endl << "-------------------------------\n";
 
-			// простой метод
-			cout << "2 - самый простой тест\n";
-			k = 0;
-			if (prost_test(a, k) == true) // true = простое
-				cout << "Число простое\n";
-			else
-				cout << "Число составное\n";
-			cout << "Кол-во итераций: " << k << endl << "-------------------------------\n";
+				// простой метод
+				cout << "2 - самый простой тест\n";
+				if (prost_test(a, k) == true) // true = простое
+					cout << "Число простое\n";
+				else
+					cout << "Число составное\n";
+				cout << "Кол-во итераций: " << k << endl << "-------------------------------\n";
 
-			// тест Люка-Лемера
-
-			cout << "3 - тест Люка-Лемера другой\n";
-			if (lucas_lehmer_test(a) == true) // true = простое
-				cout << "Число простое\n";
-			else
-				cout << "Число составное\n";
-			cout << "Кол-во итераций: " << k << endl << "==========================================================================================\n";
-
+				// тест Люка-Лемера
+				cout << "3 - тест Люка-Лемера\n";
+				if (lucas_lehmer_test(a, k) == true) // true = простое
+					cout << "Число простое\n";
+				else
+					cout << "Число составное\n";
+				cout << "Кол-во итераций: " << k << endl;
+			}
 			break;
 		}
 		case 's': // начать заново
@@ -169,9 +178,9 @@ int main()
 
 int main()
 {
-	SetConsoleOutputCP(1251);
-	SetConsoleCP(1251);
-	int a;
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    int a;
 	char c;
 	do
 	{
